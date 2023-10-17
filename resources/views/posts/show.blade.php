@@ -50,6 +50,7 @@
                 </div>
 
                 <section class="col-span-8 col-start-5 mt-10 space-y-10">
+                    @include('posts._add-comment-form')
                     @foreach($post->comments as $comment)
                         <x-post-comment :comment="$comment"/>
                     @endforeach
