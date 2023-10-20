@@ -5,6 +5,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
+use MailchimpMarketing\ApiException;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,33 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::post('newsletter', function () {
+    request()->validate([
+        'email' => 'required|email',
+    ]);
+
+    $mailchimp = new \MailchimpMarketing\ApiClient();
+
+    $mailchimp->setConfig([
+        'apiKey' => config('services.mailchimp.key'),
+        'server' => 'us21'
+    ]);
+
+    try {
+        $mailchimp->lists->addListMember("29fc931ea3", [
+            "email_address" => request('email'),
+            "status" => "subscribed",
+        ]);
+    } catch (Exception $e) {
+        throw ValidationException::withMessages([
+            "email" => "This email couldn't be added to our newsletter list.",
+        ]);
+    }
+
+
+    return redirect('/')->with('success', 'Thank you for subscribing to th newsletter.');
+});
 
 Route::get('/', [PostController::class, 'index'])->name('home');
 
