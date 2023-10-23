@@ -20,6 +20,6 @@ class NewsletterController extends Controller
             ]);
         }
 
-        return redirect('/')->with('success', 'Thank you for subscribing to th newsletter.');
+        return redirect('/')->with('success', 'Thank you for subscribing to the newsletter.');
     }
 }
