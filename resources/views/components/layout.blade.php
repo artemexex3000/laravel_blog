@@ -42,6 +42,12 @@
                 <a href="/signin" class="text-xs font-bold uppercase ml-6">Sign In</a>
             @endauth
 
+            @if(auth()->user()->is_admin ?? false)
+                <a href="/admin/posts/create"
+                   class="bg-white ml-3 rounded-full text-xs text-blue-500 font-semibold border border-blue-500 uppercase py-3 px-5">
+                    Create new post
+                </a>
+            @endif
 
             <a href="#newsletter"
                class="bg-blue-500 ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-5">
@@ -76,11 +82,7 @@
                         @enderror
                     </div>
 
-                    <button type="submit"
-                            class="transition-colors duration-300 bg-blue-500 hover:bg-blue-600 mt-4 lg:mt-0 lg:ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-8"
-                    >
-                        Subscribe
-                    </button>
+                    <x-submit-button>Subscribe</x-submit-button>
                 </form>
             </div>
         </div>
