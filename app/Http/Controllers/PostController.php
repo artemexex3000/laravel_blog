@@ -56,4 +56,13 @@ class PostController extends Controller
 
         return redirect("/posts/$slug")->with('success', 'You have uploaded new post.');
     }
+
+    public function update(Post $post, Request $request) {
+
+    }
+
+    public function destroy(Post $post, Request $request)
+    {
+
+    }
 }

@@ -26,8 +26,6 @@ Route::get('/', [PostController::class, 'index'])->name('home');
 Route::get('/posts/{post:slug}', [PostController::class, 'show']);
 Route::post('/posts/{post:slug}/comment', [CommentController::class, 'store'])->middleware('auth');
 
-Route::delete('/posts/{post:slug}/', [PostController::class, 'delete'])->middleware('admin');
-
 Route::post('newsletter', NewsletterController::class);
 
 Route::get('register', [RegisterController::class, 'create'])->middleware('guest');
@@ -40,3 +38,5 @@ Route::post('logout', [SessionsController::class, 'destroy'])->middleware('auth'
 
 Route::get('admin/posts/create', [PostController::class, 'create'])->middleware('admin');
 Route::post('admin/posts', [PostController::class, 'store'])->middleware('admin');
+Route::patch('admin/posts/{post:slug}', [PostController::class, 'update'])->middleware('admin');
+Route::delete('admin/posts/{post:slug}', [PostController::class, 'destroy'])->middleware('admin');
