@@ -27,27 +27,29 @@
 
         <div class="mt-8 md:mt-0 flex items-center">
             @auth
-                <span class="text-xs font-bold uppercase">Welcome, {{ auth()->user()->name }}</span>
+                <x-dropdown>
+                    <x-slot:trigger>
+                        <button class="text-xs font-bold uppercase">Welcome, {{ auth()->user()->name }}</button>
+                    </x-slot:trigger>
 
-                <form action="/logout" method="post">
+                    <x-dropdown-item href="/admin/posts/create" :active="request()->is('admin/posts/create')">New Post</x-dropdown-item>
+                    <x-dropdown-item href="/logout" x-data="{}" @click.prevent="document.querySelector('#logout-form').submit()">Log Out</x-dropdown-item>
+                </x-dropdown>
+
+                <form id="logout-form" action="/logout" method="post" class="hidden">
                     @csrf
-
-                    <button class="text-xs font-bold uppercase ml-6" type="submit">
-                        Logout
-                    </button>
-
                 </form>
             @else
                 <a href="/register" class="text-xs font-bold uppercase">Register</a>
                 <a href="/signin" class="text-xs font-bold uppercase ml-6">Sign In</a>
             @endauth
 
-            @if(auth()->user()->is_admin ?? false)
-                <a href="/admin/posts/create"
-                   class="bg-white ml-3 rounded-full text-xs text-blue-500 font-semibold border border-blue-500 uppercase py-3 px-5">
-                    Create new post
-                </a>
-            @endif
+{{--            @if(auth()->user()->is_admin ?? false)--}}
+{{--                <a href="/admin/posts/create"--}}
+{{--                   class="bg-white ml-3 rounded-full text-xs text-blue-500 font-semibold border border-blue-500 uppercase py-3 px-5">--}}
+{{--                    Create new post--}}
+{{--                </a>--}}
+{{--            @endif--}}
 
             <a href="#newsletter"
                class="bg-blue-500 ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-5">
@@ -75,14 +77,11 @@
                             <img src="/images/mailbox-icon.svg" alt="mailbox letter">
                         </label>
 
-                        <input id="email" name="email" type="text" placeholder="Your email address"
-                               class="lg:bg-transparent py-2 lg:py-0 pl-4 focus-within:outline-none">
-                        @error('email')
-                        <span class="text-xs text-red-500">{{ $message }}</span>
-                        @enderror
+                        <x-form.input name="email"/>
+                        <x-form.error name="email"/>
                     </div>
 
-                    <x-submit-button>Subscribe</x-submit-button>
+                    <x-form.button>Subscribe</x-form.button>
                 </form>
             </div>
         </div>

@@ -26,6 +26,8 @@ Route::get('/', [PostController::class, 'index'])->name('home');
 Route::get('/posts/{post:slug}', [PostController::class, 'show']);
 Route::post('/posts/{post:slug}/comment', [CommentController::class, 'store'])->middleware('auth');
 
+Route::delete('/posts/{post:slug}/', [PostController::class, 'delete'])->middleware('admin');
+
 Route::post('newsletter', NewsletterController::class);
 
 Route::get('register', [RegisterController::class, 'create'])->middleware('guest');

@@ -37,24 +37,23 @@ class PostController extends Controller
 
     public function store(Post $post, Request $request)
     {
-        // validate data
         request()->validate([
-            'title' => 'required|min:3|max:255',
+            'title' => 'required|unique:posts|min:3|max:255',
             'excerpt' => 'required|min:3|max:255',
             'body' => 'required|min:3|max:2555',
         ]);
 
-        // store data
-        $post->create([
+        $slug = $post->create([
             'user_id' => $request->user()->id,
             'category_id' => $request->input('category'),
             'title' => $request->input('title'),
             'slug' => Str::slug(strtolower($request->input('title')), '-'),
             'excerpt' => $request->input('excerpt'),
             'body' => $request->input('body'),
+            'thumbnail' => $request->file('thumbnail')?->store('thumbnails'),
             'published_at' => now(),
-        ]);
-        // redirect
-        return redirect('/')->with('success', 'You have uploaded new post.');
+        ])->slug;
+
+        return redirect("/posts/$slug")->with('success', 'You have uploaded new post.');
     }
 }

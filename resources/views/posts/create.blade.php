@@ -1,89 +1,31 @@
-@props(['categories'])
-
 <x-layout>
     <section class="px-8 py-8">
         <x-panel class="max-w-sm mx-auto">
-            <form action="/admin/posts" method="post">
+            <form action="/admin/posts" method="post" enctype="multipart/form-data">
                 @csrf
 
-                <div class="mb-6">
-                    <label class="block mb-2 uppercase font-bold text-xs text-gray-700"
-                           for="title"
-                    >
-                        Title
-                    </label>
-
-                    <input class="border border-gray-400 p-2 w-full"
-                           type="text"
-                           name="title"
-                           id="title"
-                           required
-                    >
-
-                    @error('title')
-                    <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
-                    @enderror
-                </div>
+                <x-form.input name="title" type="text"/>
+                <x-form.textarea name="excerpt"/>
+                <x-form.textarea name="body"/>
+                <x-form.input name="thumbnail" type="file"/>
 
                 <div class="mb-6">
-                    <label class="block mb-2 uppercase font-bold text-xs text-gray-700"
-                           for="excerpt"
+                    <x-form.label name="category"/>
+                    <select name="category" id="category"
+                            class="py-2 pl-3 pr-9 text-sm font-semibold w-32 text-left lg:inline-flex rounded-xl"
                     >
-                        Excerpt
-                    </label>
-
-                    <textarea class="border border-gray-400 p-2 w-full"
-                              name="excerpt"
-                              id="excerpt"
-                              required
-                    ></textarea>
-
-                    @error('excerpt')
-                    <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mb-6">
-                    <label class="block mb-2 uppercase font-bold text-xs text-gray-700"
-                           for="body"
-                    >
-                        Body
-                    </label>
-
-                    <textarea class="border border-gray-400 p-2 w-full"
-                              name="body"
-                              id="body"
-                              required
-                    ></textarea>
-
-                    @error('body')
-                    <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mb-6">
-                    <label class="block mb-2 uppercase font-bold text-xs text-gray-700"
-                           for="category"
-                    >
-                        Category
-                    </label>
-
-                    <select name="category" id="category" class="py-2 pl-3 pr-9 text-sm font-semibold w-32 text-left lg:inline-flex rounded-xl">
-                        @php
-                            $categories = App\Models\Category::all();
-                        @endphp
-
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ ucwords($category->name) }}</option>
+                        @foreach(App\Models\Category::all() as $category)
+                            <option
+                                value="{{ $category->id }}"
+                                {{ old('category') == $category->id ? 'selected' : '' }}
+                            >{{ ucwords($category->name) }}
+                            </option>
                         @endforeach
                     </select>
-
-                    @error('category')
-                    <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
-                    @enderror
+                    <x-form.error name="category"/>
                 </div>
 
-                <x-submit-button>Publish</x-submit-button>
+                <x-form.button>Publish</x-form.button>
             </form>
         </x-panel>
     </section>
